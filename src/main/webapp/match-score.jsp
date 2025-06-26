@@ -50,21 +50,45 @@
                 </thead>
                 <tbody>
                 <tr class="player1">
-                    <td class="table-text">Rafael Nadal</td>
-                    <td class="table-text">2</td>
-                    <td class="table-text">4</td>
-                    <td class="table-text">40</td>
+                    <td class="table-text">${requestScope.matchScoreDto.firstPlayer.name}</td>
+                    <td class="table-text">${requestScope.matchScoreDto.firstPlayerSets}</td>
+                    <td class="table-text">${requestScope.matchScoreDto.firstPlayerGames}</td>
                     <td class="table-text">
-                        <div class="score-btn">Score</div>
+                        <c:choose>
+                            <c:when test="${requestScope.matchScoreDto.firstPlayerGames == 6 and requestScope.matchScoreDto.secondPlayerGames == 6}">
+                                ${requestScope.matchScoreDto.firstPlayerTieBreakPoints}
+                            </c:when>
+
+                            <c:otherwise>
+                                ${requestScope.matchScoreDto.firstPlayerPoint.point}
+                            </c:otherwise>
+                        </c:choose>
+                    <td class="table-text">
+                        <form method="post" action="${pageContext.request.contextPath}/match-score?uuid=${requestScope.uuid}">
+                            <input type="hidden" name="playerName" value="${requestScope.matchScoreDto.firstPlayer.name}">
+                            <button class="score-btn" type="submit">Score</button>
+                        </form>
                     </td>
                 </tr>
                 <tr class="player2">
-                    <td class="table-text">Roger Federer</td>
-                    <td class="table-text">2</td>
-                    <td class="table-text">3</td>
-                    <td class="table-text">15</td>
+                    <td class="table-text">${requestScope.matchScoreDto.secondPlayer.name}</td>
+                    <td class="table-text">${requestScope.matchScoreDto.secondPlayerSets}</td>
+                    <td class="table-text">${requestScope.matchScoreDto.secondPlayerGames}</td>
                     <td class="table-text">
-                        <div class="score-btn">Score</div>
+                        <c:choose>
+                            <c:when test="${requestScope.matchScoreDto.firstPlayerGames == 6 and requestScope.matchScoreDto.secondPlayerGames == 6}">
+                                ${requestScope.matchScoreDto.secondPlayerTieBreakPoints}
+                            </c:when>
+
+                            <c:otherwise>
+                                ${requestScope.matchScoreDto.secondPlayerPoint.point}
+                            </c:otherwise>
+                        </c:choose>
+                    <td class="table-text">
+                        <form method="post" action="${pageContext.request.contextPath}/match-score?uuid=${requestScope.uuid}">
+                            <input type="hidden" name="playerName" value="${requestScope.matchScoreDto.secondPlayer.name}">
+                            <button class="score-btn" type="submit">Score</button>
+                        </form>
                     </td>
                 </tr>
                 </tbody>
