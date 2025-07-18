@@ -2,25 +2,21 @@ package com.taitly.tennisscoreboard.dto;
 
 import com.taitly.tennisscoreboard.entity.Player;
 import com.taitly.tennisscoreboard.model.TennisPoint;
-import lombok.*;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@Builder
-public class MatchScoreDto {
-    private Player firstPlayer;
-    private Player secondPlayer;
+public record MatchScoreDto(
+        Player firstPlayer,
+        Player secondPlayer,
 
-    private int firstPlayerSets;
-    private int secondPlayerSets;
+        int firstPlayerSets,
+        int secondPlayerSets,
 
-    private int firstPlayerGames;
-    private int secondPlayerGames;
+        int firstPlayerGames,
+        int secondPlayerGames,
 
-    private TennisPoint firstPlayerPoint;
-    private TennisPoint secondPlayerPoint;
+        TennisPoint firstPlayerPoint,
+        TennisPoint secondPlayerPoint,
 
-    private int firstPlayerTieBreakPoints;
-    private int secondPlayerTieBreakPoints;
+        int firstPlayerTieBreakPoints,
+        int secondPlayerTieBreakPoints
+) {
 }
