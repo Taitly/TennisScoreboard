@@ -1,5 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <!DOCTYPE html>
 <html>
@@ -35,55 +35,137 @@
 <main>
     <div class="container">
         <h1>Matches</h1>
+        <c:if test="${not empty requestScope.errorMessage}">
+            <p style="color: red;">${requestScope.errorMessage}</p>
+        </c:if>
         <div class="input-container">
-            <input class="input-filter" placeholder="Filter by name" type="text" />
-            <div>
-                <a href="${pageContext.request.contextPath}/matches?page=1">
-                    <button class="btn-filter">Reset Filter</button>
-                </a>
-            </div>
+            <form id="filterForm" class="form-matches" method="get" action="${pageContext.request.contextPath}/matches"
+                  style="display: flex; width: 100%; gap: 10px;">
+                <input type="hidden" name="page" value="1"/>
+                <input class="input-filter" placeholder="Filter by player name" type="text" name="filter_by_player_name"
+                       value="${param.filter_by_player_name}"/>
+                <button type="submit" class="btn-filter">Filter</button>
+                <button type="button" class="btn-filter"
+                        onclick="window.location.href='${pageContext.request.contextPath}/matches?page=1';">Reset Filter
+                </button>
+            </form>
         </div>
 
-        <table class="table-matches">
-            <tr>
-                <th>Player One</th>
-                <th>Player Two</th>
-                <th>Winner</th>
-            </tr>
-            <tr>
-                <td>Rafael Nadal</td>
-                <td>Roger Federer</td>
-                <td><span class="winner-name-td">Rafael Nadal</span></td>
-            </tr>
-            <tr>
-                <td>Rafael Nadal</td>
-                <td>Roger Federer</td>
-                <td><span class="winner-name-td">Roger Federer</span></td>
-            </tr>
-            <tr>
-                <td>Rafael Nadal</td>
-                <td>Roger Federer</td>
-                <td><span class="winner-name-td">Rafael Nadal</span></td>
-            </tr>
-            <tr>
-                <td>Rafael Nadal</td>
-                <td>Roger Federer</td>
-                <td><span class="winner-name-td">Roger Federer</span></td>
-            </tr>
-            <tr>
-                <td>Rafael Nadal</td>
-                <td>Roger Federer</td>
-                <td><span class="winner-name-td">Rafael Nadal</span></td>
-            </tr>
-        </table>
+        <c:choose>
+            <c:when test="${empty requestScope.matches}">
+                <p>No matches found for your filter.</p>
+            </c:when>
+            <c:otherwise>
+                <table class="table-matches">
+                    <tr>
+                        <th>Player One</th>
+                        <th>Player Two</th>
+                        <th>Winner</th>
+                    </tr>
+                    <c:forEach var="match" items="${requestScope.matches}">
+                        <tr>
+                            <td>${match.player1.name}</td>
+                            <td>${match.player2.name}</td>
+                            <td><span class="winner-name-td">${match.winner.name} 🏆</span></td>
+                        </tr>
+                    </c:forEach>
+                </table>
 
-        <div class="pagination">
-            <a class="prev" href="#"> < </a>
-            <a class="num-page current" href="#">1</a>
-            <a class="num-page" href="#">2</a>
-            <a class="num-page" href="#">3</a>
-            <a class="next" href="#"> > </a>
-        </div>
+                <div class="pagination">
+
+                    <!-- Prev link -->
+                    <c:if test="${requestScope.page > 1}">
+                        <c:choose>
+                            <c:when test="${not empty param.filter_by_player_name}">
+                                <a class="prev"
+                                   href="${pageContext.request.contextPath}/matches?page=${requestScope.page - 1}&filter_by_player_name=${param.filter_by_player_name}">
+                                    &lt; </a>
+                            </c:when>
+                            <c:otherwise>
+                                <a class="prev"
+                                   href="${pageContext.request.contextPath}/matches?page=${requestScope.page - 1}">
+                                    &lt; </a>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:if>
+
+                    <!-- Pages before current -->
+                    <c:if test="${requestScope.page > 2}">
+                        <c:choose>
+                            <c:when test="${not empty param.filter_by_player_name}">
+                                <a href="${pageContext.request.contextPath}/matches?page=${requestScope.page - 2}&filter_by_player_name=${param.filter_by_player_name}"
+                                   class="num-page">${requestScope.page - 2}</a>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="${pageContext.request.contextPath}/matches?page=${requestScope.page - 2}"
+                                   class="num-page">${requestScope.page - 2}</a>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:if>
+
+                    <c:if test="${requestScope.page > 1}">
+                        <c:choose>
+                            <c:when test="${not empty param.filter_by_player_name}">
+                                <a href="${pageContext.request.contextPath}/matches?page=${requestScope.page - 1}&filter_by_player_name=${param.filter_by_player_name}"
+                                   class="num-page">${requestScope.page - 1}</a>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="${pageContext.request.contextPath}/matches?page=${requestScope.page - 1}"
+                                   class="num-page">${requestScope.page - 1}</a>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:if>
+
+                    <!-- Current page -->
+                    <a class="num-page current" href="#">
+                            ${requestScope.page}
+                    </a>
+
+                    <!-- Pages after current -->
+                    <c:if test="${requestScope.page + 1 <= requestScope.totalPages}">
+                        <c:choose>
+                            <c:when test="${not empty param.filter_by_player_name}">
+                                <a href="${pageContext.request.contextPath}/matches?page=${requestScope.page + 1}&filter_by_player_name=${param.filter_by_player_name}"
+                                   class="num-page">${requestScope.page + 1}</a>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="${pageContext.request.contextPath}/matches?page=${requestScope.page + 1}"
+                                   class="num-page">${requestScope.page + 1}</a>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:if>
+
+                    <c:if test="${requestScope.page + 2 <= requestScope.totalPages}">
+                        <c:choose>
+                            <c:when test="${not empty param.filter_by_player_name}">
+                                <a href="${pageContext.request.contextPath}/matches?page=${requestScope.page + 2}&filter_by_player_name=${param.filter_by_player_name}"
+                                   class="num-page">${requestScope.page + 2}</a>
+                            </c:when>
+                            <c:otherwise>
+                                <a href="${pageContext.request.contextPath}/matches?page=${requestScope.page + 2}"
+                                   class="num-page">${requestScope.page + 2}</a>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:if>
+
+                    <!-- Next link -->
+                    <c:if test="${requestScope.page < requestScope.totalPages}">
+                        <c:choose>
+                            <c:when test="${not empty param.filter_by_player_name}">
+                                <a class="next"
+                                   href="${pageContext.request.contextPath}/matches?page=${requestScope.page + 1}&filter_by_player_name=${param.filter_by_player_name}">
+                                    &gt; </a>
+                            </c:when>
+                            <c:otherwise>
+                                <a class="next"
+                                   href="${pageContext.request.contextPath}/matches?page=${requestScope.page + 1}">
+                                    &gt; </a>
+                            </c:otherwise>
+                        </c:choose>
+                    </c:if>
+                </div>
+            </c:otherwise>
+        </c:choose>
     </div>
 </main>
 <footer>
