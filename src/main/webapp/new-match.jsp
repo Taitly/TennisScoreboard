@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -41,11 +42,13 @@
                         <p style="color: red;">${requestScope.error}</p>
                     </c:if>
 
-                    <label class="label-player" for="playerOne">Player one</label>
-                    <input class="input-player" name="playerOne" placeholder="Name" type="text" id="playerOne" required title="Enter a name">
+                    <label class="label-player" for="playerOne">Player one name</label>
+                    <input class="input-player" name="playerOne" placeholder="Example: Bob Miles." type="text" id="playerOne" required title="Enter a name"
+                           value='<c:out value="${param.playerOne != null ? param.playerOne : ''}" />'>
 
-                    <label class="label-player" for="playerTwo">Player two</label>
-                    <input class="input-player" name="playerTwo" placeholder="Name" type="text" id="playerTwo" required title="Enter a name">
+                    <label class="label-player" for="playerTwo">Player two name</label>
+                    <input class="input-player" name="playerTwo" placeholder="Example: Bob Miles." type="text" id="playerTwo" required title="Enter a name"
+                           value='<c:out value="${param.playerTwo != null ? param.playerTwo : ''}" />'>
 
                     <input class="form-button" type="submit" value="Start">
                 </form>
