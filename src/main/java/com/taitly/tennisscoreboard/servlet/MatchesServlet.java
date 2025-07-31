@@ -1,6 +1,8 @@
 package com.taitly.tennisscoreboard.servlet;
 
+import com.taitly.tennisscoreboard.dto.MatchDto;
 import com.taitly.tennisscoreboard.entity.Match;
+import com.taitly.tennisscoreboard.mapper.MatchMapper;
 import com.taitly.tennisscoreboard.service.PaginationService;
 import com.taitly.tennisscoreboard.validation.PageValidator;
 import jakarta.servlet.ServletException;
@@ -11,10 +13,12 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @WebServlet("/matches")
 public class MatchesServlet extends HttpServlet {
     private final PaginationService paginationService = PaginationService.getINSTANCE();
+    private final MatchMapper matchMapper = MatchMapper.INSTANCE;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -37,8 +41,12 @@ public class MatchesServlet extends HttpServlet {
 
         PageValidator.validatePageAndPlayers(page, totalPages, !matches.isEmpty());
 
+        List<MatchDto> matchDtos = matches.stream()
+                .map(matchMapper::toDto)
+                .collect(Collectors.toList());
+
+        req.setAttribute("matches", matchDtos);
         req.setAttribute("totalPages", totalPages);
-        req.setAttribute("matches", matches);
         req.setAttribute("page", page);
 
         req.getRequestDispatcher("/matches.jsp").forward(req, resp);
