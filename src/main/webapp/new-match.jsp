@@ -44,11 +44,11 @@
 
                     <label class="label-player" for="playerOne">Player one name</label>
                     <input class="input-player" name="playerOne" placeholder="Example: Bob Miles." type="text" id="playerOne" required title="Enter a name"
-                           value='<c:out value="${param.playerOne != null ? param.playerOne : ''}" />'>
+                           value='<c:out value="${requestScope.playerOne != null ? requestScope.playerOne : param.playerOne}" />'>
 
                     <label class="label-player" for="playerTwo">Player two name</label>
                     <input class="input-player" name="playerTwo" placeholder="Example: Bob Miles." type="text" id="playerTwo" required title="Enter a name"
-                           value='<c:out value="${param.playerTwo != null ? param.playerTwo : ''}" />'>
+                           value='<c:out value="${requestScope.playerTwo != null ? requestScope.playerTwo : param.playerTwo}" />'>
 
                     <input class="form-button" type="submit" value="Start">
                 </form>
