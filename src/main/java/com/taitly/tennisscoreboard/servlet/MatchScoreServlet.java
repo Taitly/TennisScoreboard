@@ -2,6 +2,8 @@ package com.taitly.tennisscoreboard.servlet;
 
 import com.taitly.tennisscoreboard.dto.MatchScoreDto;
 import com.taitly.tennisscoreboard.entity.Player;
+import com.taitly.tennisscoreboard.mapper.MatchScoreMapper;
+import com.taitly.tennisscoreboard.model.MatchScore;
 import com.taitly.tennisscoreboard.service.FinishedMatchesPersistenceService;
 import com.taitly.tennisscoreboard.service.MatchScoreCalculationService;
 import com.taitly.tennisscoreboard.service.OngoingMatchesService;
@@ -20,6 +22,7 @@ public class MatchScoreServlet extends HttpServlet {
     private final OngoingMatchesService ongoingMatchesService = OngoingMatchesService.getINSTANCE();
     private final MatchScoreCalculationService matchScoreCalculationService = MatchScoreCalculationService.getINSTANCE();
     private final FinishedMatchesPersistenceService finishedMatchesPersistenceService = FinishedMatchesPersistenceService.getINSTANCE();
+    private final MatchScoreMapper matchScoreMapper = MatchScoreMapper.INSTANCE;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -27,7 +30,9 @@ public class MatchScoreServlet extends HttpServlet {
 
         MatchValidator.validateMatchExists(uuid);
 
-        MatchScoreDto matchScoreDto = ongoingMatchesService.getMatchScore(uuid);
+        MatchScore matchScore = ongoingMatchesService.getMatchScore(uuid);
+
+        MatchScoreDto matchScoreDto = matchScoreMapper.toDto(matchScore);
 
         req.setAttribute("matchScoreDto", matchScoreDto);
         req.setAttribute("uuid", uuid);
@@ -40,26 +45,24 @@ public class MatchScoreServlet extends HttpServlet {
         UUID uuid = UUID.fromString(req.getParameter("uuid"));
         String playerName = req.getParameter("playerName");
 
-        Player player = Player.builder()
-                .name(playerName)
-                .build();
-
         MatchValidator.validateMatchExists(uuid);
 
-        MatchScoreDto currentMatchScoreDto = ongoingMatchesService.getMatchScore(uuid);
-        MatchScoreDto updatedMatchScoreDto = matchScoreCalculationService.playerScores(currentMatchScoreDto, player);
+        MatchScore matchScore = ongoingMatchesService.getMatchScore(uuid);
+        Player scoringPlayer = matchScore.getPlayerByName(playerName);
 
-        ongoingMatchesService.updateMatchScore(uuid, updatedMatchScoreDto);
+        ongoingMatchesService.updateMatchScore(uuid, scoringPlayer);
 
-        if (!matchScoreCalculationService.isMatchOver(updatedMatchScoreDto)) {
+        MatchScore updatedMatchScore = ongoingMatchesService.getMatchScore(uuid);
+        MatchScoreDto updatedMatchScoreDto = matchScoreMapper.toDto(updatedMatchScore);
+
+        if (!updatedMatchScore.isFinished()) {
             req.setAttribute("matchScoreDto", updatedMatchScoreDto);
             req.setAttribute("uuid", uuid);
 
             req.getRequestDispatcher("match-score.jsp").forward(req, resp);
         } else {
-            Player winner = matchScoreCalculationService.getWinner(updatedMatchScoreDto);
 
-            finishedMatchesPersistenceService.saveMatchScore(updatedMatchScoreDto, winner);
+            finishedMatchesPersistenceService.saveMatchScore(updatedMatchScore);
             ongoingMatchesService.removeMatchScore(uuid);
 
             resp.sendRedirect(req.getContextPath() + "/matches");
