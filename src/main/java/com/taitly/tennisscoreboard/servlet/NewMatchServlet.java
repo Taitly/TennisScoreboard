@@ -1,8 +1,7 @@
 package com.taitly.tennisscoreboard.servlet;
 
-import com.taitly.tennisscoreboard.dto.MatchScoreDto;
 import com.taitly.tennisscoreboard.entity.Player;
-import com.taitly.tennisscoreboard.model.TennisPoint;
+import com.taitly.tennisscoreboard.model.MatchScore;
 import com.taitly.tennisscoreboard.service.OngoingMatchesService;
 import com.taitly.tennisscoreboard.validation.PlayerValidator;
 import jakarta.servlet.ServletException;
@@ -40,10 +39,9 @@ public class NewMatchServlet extends HttpServlet {
                 .name(secondPlayerName)
                 .build();
 
-        MatchScoreDto matchScoreDto = new MatchScoreDto(firstPlayer, secondPlayer, 0, 0,
-                0, 0, TennisPoint.ZERO, TennisPoint.ZERO, 0, 0);
+        MatchScore matchScore = new MatchScore(firstPlayer, secondPlayer);
 
-        UUID uuid = ongoingMatchesService.setMatchScore(matchScoreDto);
+        UUID uuid = ongoingMatchesService.setMatchScore(matchScore);
 
         resp.sendRedirect(req.getContextPath() + "/match-score?uuid=" + uuid);
     }
