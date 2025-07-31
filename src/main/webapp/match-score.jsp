@@ -46,47 +46,50 @@
                     <th class="table-text">Sets</th>
                     <th class="table-text">Games</th>
                     <th class="table-text">Points</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr class="player1">
-                    <td class="table-text">${requestScope.matchScoreDto.firstPlayer.name}</td>
-                    <td class="table-text">${requestScope.matchScoreDto.firstPlayerSets}</td>
-                    <td class="table-text">${requestScope.matchScoreDto.firstPlayerGames}</td>
+                    <td class="table-text">${requestScope.matchScoreDto.firstPlayerScore.player.name}</td>
+                    <td class="table-text">${requestScope.matchScoreDto.firstPlayerScore.setsWon}</td>
+                    <td class="table-text">${requestScope.matchScoreDto.firstPlayerScore.gamesWon}</td>
                     <td class="table-text">
                         <c:choose>
-                            <c:when test="${requestScope.matchScoreDto.firstPlayerGames == 6 and requestScope.matchScoreDto.secondPlayerGames == 6}">
-                                ${requestScope.matchScoreDto.firstPlayerTieBreakPoints}
+                            <c:when test="${requestScope.matchScoreDto.firstPlayerScore.gamesWon == 6 and requestScope.matchScoreDto.secondPlayerScore.gamesWon == 6}">
+                                ${requestScope.matchScoreDto.firstPlayerScore.tieBreakPoints}
                             </c:when>
 
                             <c:otherwise>
-                                ${requestScope.matchScoreDto.firstPlayerPoint.point}
+                                ${requestScope.matchScoreDto.firstPlayerScore.currentPoint.point}
                             </c:otherwise>
                         </c:choose>
+                    </td>
                     <td class="table-text">
                         <form method="post" action="${pageContext.request.contextPath}/match-score?uuid=${requestScope.uuid}">
-                            <input type="hidden" name="playerName" value="${requestScope.matchScoreDto.firstPlayer.name}">
+                            <input type="hidden" name="playerName" value="${requestScope.matchScoreDto.firstPlayerScore.player.name}">
                             <button class="score-btn" type="submit">Score</button>
                         </form>
                     </td>
                 </tr>
                 <tr class="player2">
-                    <td class="table-text">${requestScope.matchScoreDto.secondPlayer.name}</td>
-                    <td class="table-text">${requestScope.matchScoreDto.secondPlayerSets}</td>
-                    <td class="table-text">${requestScope.matchScoreDto.secondPlayerGames}</td>
+                    <td class="table-text">${requestScope.matchScoreDto.secondPlayerScore.player.name}</td>
+                    <td class="table-text">${requestScope.matchScoreDto.secondPlayerScore.setsWon}</td>
+                    <td class="table-text">${requestScope.matchScoreDto.secondPlayerScore.gamesWon}</td>
                     <td class="table-text">
                         <c:choose>
-                            <c:when test="${requestScope.matchScoreDto.firstPlayerGames == 6 and requestScope.matchScoreDto.secondPlayerGames == 6}">
-                                ${requestScope.matchScoreDto.secondPlayerTieBreakPoints}
+                            <c:when test="${requestScope.matchScoreDto.firstPlayerScore.gamesWon == 6 and requestScope.matchScoreDto.secondPlayerScore.gamesWon == 6}">
+                                ${requestScope.matchScoreDto.secondPlayerScore.tieBreakPoints}
                             </c:when>
 
                             <c:otherwise>
-                                ${requestScope.matchScoreDto.secondPlayerPoint.point}
+                                ${requestScope.matchScoreDto.secondPlayerScore.currentPoint.point}
                             </c:otherwise>
                         </c:choose>
+                    </td>
                     <td class="table-text">
                         <form method="post" action="${pageContext.request.contextPath}/match-score?uuid=${requestScope.uuid}">
-                            <input type="hidden" name="playerName" value="${requestScope.matchScoreDto.secondPlayer.name}">
+                            <input type="hidden" name="playerName" value="${requestScope.matchScoreDto.secondPlayerScore.player.name}">
                             <button class="score-btn" type="submit">Score</button>
                         </form>
                     </td>
