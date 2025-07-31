@@ -5,7 +5,7 @@ import com.taitly.tennisscoreboard.model.MatchScore;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+@Mapper(uses = {PlayerScoreMapper.class, PlayerMapper.class, TennisSetMapper.class, TennisTieBreakMapper.class})
 public interface MatchScoreMapper {
     MatchScoreMapper INSTANCE = Mappers.getMapper(MatchScoreMapper.class);
 
