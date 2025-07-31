@@ -28,7 +28,6 @@ public enum TennisPoint {
             case FORTY -> {
                 return ADVANTAGE;
             }
-
             default -> {
                 return this;
             }

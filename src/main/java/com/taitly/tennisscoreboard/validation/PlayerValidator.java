@@ -8,8 +8,8 @@ import java.util.regex.Pattern;
 @UtilityClass
 public class PlayerValidator {
     private static final String INVALID_PLAYER_NAME = """
-            Invalid player name. Enter the full name with a first name (at least 2 letters) and a last name (at least 2 letters), separated by a space.
-            Optional middle name or initial is allowed.
+            Invalid player name. Enter the full name in English using Latin letters with a first name (at least 2 letters) and a last name (at least 2 letters), separated by a single space.
+            An optional middle name or initial is allowed after the last name, also separated by single spaces.
             Example: "Bob Miles" or "Emily O'Connor" or "John Smith J".
             """;
 
