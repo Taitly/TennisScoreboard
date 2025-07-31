@@ -1,22 +1,11 @@
 package com.taitly.tennisscoreboard.dto;
 
-import com.taitly.tennisscoreboard.entity.Player;
-import com.taitly.tennisscoreboard.model.TennisPoint;
+import java.util.List;
 
 public record MatchScoreDto(
-        Player firstPlayer,
-        Player secondPlayer,
-
-        int firstPlayerSets,
-        int secondPlayerSets,
-
-        int firstPlayerGames,
-        int secondPlayerGames,
-
-        TennisPoint firstPlayerPoint,
-        TennisPoint secondPlayerPoint,
-
-        int firstPlayerTieBreakPoints,
-        int secondPlayerTieBreakPoints
+        PlayerScoreDto firstPlayerScore,
+        PlayerScoreDto secondPlayerScore,
+        List<TennisSetDto> sets,
+        PlayerDto winner
 ) {
 }
