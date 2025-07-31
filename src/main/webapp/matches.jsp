@@ -64,8 +64,8 @@
                     </tr>
                     <c:forEach var="match" items="${requestScope.matches}">
                         <tr>
-                            <td>${match.player1.name}</td>
-                            <td>${match.player2.name}</td>
+                            <td>${match.firstPlayer.name}</td>
+                            <td>${match.secondPlayer.name}</td>
                             <td><span class="winner-name-td">${match.winner.name} 🏆</span></td>
                         </tr>
                     </c:forEach>
