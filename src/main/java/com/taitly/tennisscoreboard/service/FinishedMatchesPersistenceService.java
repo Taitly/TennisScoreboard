@@ -2,10 +2,10 @@ package com.taitly.tennisscoreboard.service;
 
 import com.taitly.tennisscoreboard.dao.MatchDao;
 import com.taitly.tennisscoreboard.dao.PlayerDao;
-import com.taitly.tennisscoreboard.dto.MatchScoreDto;
 import com.taitly.tennisscoreboard.entity.Match;
 import com.taitly.tennisscoreboard.entity.Player;
 import com.taitly.tennisscoreboard.exception.PlayerAlreadyExistsException;
+import com.taitly.tennisscoreboard.model.MatchScore;
 import jakarta.persistence.PersistenceException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.Getter;
@@ -25,13 +25,13 @@ public class FinishedMatchesPersistenceService {
 
     }
 
-    public void saveMatchScore(MatchScoreDto matchScoreDto, Player winner) {
-        Player playerOne = saveOrGetPlayerByName(matchScoreDto.firstPlayer().getName());
-        Player playerTwo = saveOrGetPlayerByName(matchScoreDto.secondPlayer().getName());
+    public void saveMatchScore(MatchScore matchScore) {
+        Player playerOne = saveOrGetPlayerByName(matchScore.getFirstPlayerScore().getPlayer().getName());
+        Player playerTwo = saveOrGetPlayerByName(matchScore.getSecondPlayerScore().getPlayer().getName());
 
-        String winnerName = winner.getName();
+        Player winner = matchScore.getWinner();
 
-        if (winnerName.equals(matchScoreDto.firstPlayer().getName())) {
+        if (winner.getName().equals(playerOne.getName())) {
             winner = playerOne;
         } else {
             winner = playerTwo;
